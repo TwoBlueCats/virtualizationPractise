@@ -1,0 +1,19 @@
+---
+- name: install mysql
+  apt: 
+    name: mysql-server
+    update_cache: yes
+
+- name: enable mysql autostart
+  ansible.builtin.systemd:
+    name: mysql
+    enabled: yes
+    masked: no
+
+- name: check that mysql is running
+  ansible.builtin.systemd:
+    state: started
+    name: mysql
+
+...
+

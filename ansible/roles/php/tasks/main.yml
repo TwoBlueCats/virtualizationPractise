@@ -1,0 +1,7 @@
+---
+- name: install php
+  apt: 
+    name: php
+
+...
+

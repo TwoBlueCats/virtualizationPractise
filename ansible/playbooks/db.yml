@@ -1,0 +1,12 @@
+---
+- name: DB playbook
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - name: include role mysql
+      include_role:
+        name: mysql
+...
+

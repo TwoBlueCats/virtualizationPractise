@@ -1,0 +1,18 @@
+---
+- name: install apache
+  apt:
+    name: apache2
+
+- name: enable apache service
+  ansible.builtin.systemd:
+    name: apache2
+    enabled: yes
+    masked: no
+
+- name: make sure apache is running
+  ansible.builtin.systemd:
+    state: started
+    name: apache2
+
+...
+

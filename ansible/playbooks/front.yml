@@ -1,0 +1,17 @@
+---
+- name: frontend playbook
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks: 
+    - name: include role apache
+      include_role:
+        name: apache
+
+    - name: include role php
+      include_role: 
+        name: php
+
+...
+

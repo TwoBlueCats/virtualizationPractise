@@ -1,0 +1,57 @@
+---
+- name: add zoneminder repository from PPA + signing key
+  ansible.builtin.apt_repository: 
+    repo: "ppa:iconnor/zoneminder-{{ zmver }}"
+    update_cache: yes
+
+- name: install zoneminder
+  apt: 
+    name: zoneminder
+
+- name: set permissions to zoneminder config
+  ansible.builtin.file:
+    path: /etc/zm/zm.conf
+    owner: root
+    group: www-data
+    mode: '0740'
+
+- name: set owner for zoneminder folder
+  ansible.builtin.file:
+    path: /usr/share/zoneminder/
+    state: directory
+    recurse: yes
+    owner: www-data
+    group: www-data
+
+- name: a2enmod config
+  action: command /usr/sbin/a2enmod {{ item }} 
+  tags: apache2
+  register: result
+  changed_when: "'already changed' not in result.stdout"
+  with_items:
+    - cgi
+    - rewrite
+    - expires
+    - headers
+
+- name: a2enconf for zoneminder
+  ansible.builtin.command: /usr/sbin/a2enconf zoneminder
+
+- name: reload apache after a2enconf config
+  ansible.builtin.systemd:
+    name: apache2
+    state: reloaded
+
+- name: enable zoneminder service
+  ansible.builtin.systemd:
+    name: zoneminder
+    enabled: yes
+    masked: no
+
+- name: make sure zoneminder is started
+  ansible.builtin.systemd:
+    state: started
+    name: zoneminder
+
+...
+

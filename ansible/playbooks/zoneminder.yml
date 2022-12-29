@@ -1,0 +1,12 @@
+---
+- name: application playbook
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks: 
+    - name: include zoneminder
+      include_role: 
+        name: zoneminder 
+...
+
